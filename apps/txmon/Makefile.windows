@@ -1,0 +1,18 @@
+CC = x86_64-w64-mingw32-gcc
+WINDRES = x86_64-w64-mingw32-windres
+STRIP = x86_64-w64-mingw32-strip
+OBJS = txmon.o
+CFLAGS = -std=gnu99 -DWINDOWS -I../../ -O2 -Wno-unused-value -mthreads \
+    -mconsole -fpic
+CLIBS = -lws2_32 -lkernel32 -L../../ -lPseudoNode
+
+TxMon.exe: txmon.o
+	$(WINDRES) txmon.rc -O coff -o txmon.res
+	$(CC) $(CFLAGS) -o TxMon.exe $(OBJS) txmon.res $(CLIBS)
+	$(STRIP) TxMon.exe
+
+txmon.o: txmon.c
+
+clean:
+	rm -f $(OBJS) txmon.o
+
